@@ -15,12 +15,26 @@ return function(Window)
     end
 
     local SelectedEgg = EggList[1] or "None"
+    local HatchDelay = 1
 
     -- Dropdown: select egg
     ControlBox:AddDropdown("Select Egg", EggList, function(val)
         SelectedEgg = val
         print("🎯 Selected Egg:", val)
     end)
+
+    -- Slider: hatch speed
+    ControlBox:AddSlider("Hatch Delay", {
+        Text = "Hatch Interval (s)",
+        Default = 1,
+        Min = 0.2,
+        Max = 5,
+        Rounding = 1,
+        Callback = function(val)
+            HatchDelay = val
+            print("⏱ Hatch interval set to:", HatchDelay)
+        end
+    })
 
     -- Toggle: auto hatch
     local AutoHatch = false
@@ -33,28 +47,26 @@ return function(Window)
             if AutoHatch then
                 task.spawn(function()
                     while AutoHatch do
-                        local targetEgg
-                        for _, map in ipairs(workspace.Game.Maps:GetChildren()) do
-                            local eggsFolder = map:FindFirstChild("Eggs")
-                            if eggsFolder and eggsFolder:FindFirstChild(SelectedEgg) then
-                                targetEgg = eggsFolder[SelectedEgg]
-                                break
-                            end
-                        end
-
-                        if targetEgg then
+                        if SelectedEgg and SelectedEgg ~= "None" then
                             print("🥚 Hatching:", SelectedEgg)
-                            local prompt = targetEgg:FindFirstChildWhichIsA("ProximityPrompt", true)
-                            if prompt then
-                                fireproximityprompt(prompt)
-                            elseif targetEgg:FindFirstChild("ClickDetector") then
-                                fireclickdetector(targetEgg.ClickDetector)
+
+                            -- 🔥 Knit Remote Hatch
+                            local args = { SelectedEgg, 1 }
+                            local KnitService = game:GetService("ReplicatedStorage")
+                                :WaitForChild("Packages")
+                                :WaitForChild("Knit")
+                                :WaitForChild("Services")
+                                :WaitForChild("jag känner en bot, hon heter anna, anna heter hon")
+
+                            local Remote = KnitService.RE["jag känner en bot, hon heter anna, anna heter hon"]
+                            if Remote then
+                                Remote:FireServer(unpack(args))
+                            else
+                                warn("⚠ Knit Remote not found")
                             end
-                        else
-                            print("⚠ Could not find egg:", SelectedEgg)
                         end
 
-                        task.wait(1)
+                        task.wait(HatchDelay)
                     end
                 end)
             end
