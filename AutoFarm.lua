@@ -1,12 +1,17 @@
--- Autofarm.lua (external tab: Kriluni finder + TP loop scaffold)
+
+-- AutoFarm.lua
 return function(Window)
-    -- ========= UI: Tab + Groupbox =========
     local AutoTab = Window:AddTab({
         Name = "Autofarm",
         Icon = "swords",
         Description = "Enemy autofarm features"
     })
+
     local FarmBox = AutoTab:AddLeftGroupbox("Enemy Autofarm", "farm")
+
+    FarmBox:AddLabel({ Text = "⚡ Autofarm loaded successfully" })
+end
+
 
     -- ========= Services / Locals =========
     local Players = game:GetService("Players")
@@ -158,3 +163,4 @@ return function(Window)
         print(("🔄 Kriluni found: %d"):format(count))
     end)
 end
+
