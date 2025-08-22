@@ -1,4 +1,3 @@
-
 -- AutoFarm.lua
 return function(Window)
     local AutoTab = Window:AddTab({
@@ -163,4 +162,5 @@ end
         print(("🔄 Kriluni found: %d"):format(count))
     end)
 end
+
 
