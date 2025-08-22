@@ -1,5 +1,11 @@
+-- AutoFarm.lua
+print("📥 AutoFarm.lua script loaded!")
+
 return function(Window)
+    print("📦 AutoFarm function executed, adding tab...")
+
     local Tab = Window:AddTab({ Title = "Autofarm" })
+    print("✅ Autofarm tab created!")
 
     -- 🥚 Gather all egg names dynamically
     local EggList = {}
@@ -12,6 +18,8 @@ return function(Window)
         end
     end
 
+    print("📋 Eggs found:", #EggList, table.concat(EggList, ", "))
+
     -- Default selection
     local SelectedEgg = EggList[1] or "None"
 
@@ -23,7 +31,7 @@ return function(Window)
         Default = SelectedEgg,
         Callback = function(val)
             SelectedEgg = val
-            print("Selected Egg:", val)
+            print("🎯 Selected Egg:", val)
         end
     })
 
@@ -35,10 +43,9 @@ return function(Window)
         Callback = function(val)
             AutoHatch = val
             if AutoHatch then
-                print("✅ Auto Hatch ON")
+                print("▶️ Auto Hatch ON")
                 task.spawn(function()
                     while AutoHatch do
-                        -- 🔹 Look for the egg by name across all maps
                         local targetEgg = nil
                         for _, map in pairs(workspace.Game.Maps:GetChildren()) do
                             local eggsFolder = map:FindFirstChild("Eggs")
@@ -49,20 +56,20 @@ return function(Window)
                         end
 
                         if targetEgg then
-                            print("Trying to hatch:", SelectedEgg)
-                            -- 🟢 Interaction logic here:
-                            -- Example: fire a proximity prompt or click detector
+                            print("🥚 Hatching:", SelectedEgg)
                             local prompt = targetEgg:FindFirstChildWhichIsA("ProximityPrompt", true)
                             if prompt then
-                                fireproximityprompt(prompt) -- Roblox exploit function
+                                fireproximityprompt(prompt)
                             end
+                        else
+                            print("⚠️ Could not find egg:", SelectedEgg)
                         end
 
-                        task.wait(1) -- hatch interval
+                        task.wait(1)
                     end
                 end)
             else
-                print("❌ Auto Hatch OFF")
+                print("⏹ Auto Hatch OFF")
             end
         end
     })
