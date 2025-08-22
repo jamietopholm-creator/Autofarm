@@ -1,6 +1,6 @@
 -- AutoFarm.lua
 return function(Window)
-    local AutoTab = Window:AddTab({ Name = "Autofarm", Icon = "zap", Description = "Egg Auto-Hatch Features" })
+    local AutoTab = Window:AddTab({ Name = "Autofamrm", Icon = "zap", Description = "Egg Auto-Hatch Features" })
     local ControlBox = AutoTab:AddLeftGroupbox("Egg Controls", "egg")
 
     -- 🥚 Function to find all eggs anywhere in Workspace
@@ -76,3 +76,4 @@ return function(Window)
         end
     })
 end
+
