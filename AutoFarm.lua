@@ -1,53 +1,40 @@
 -- AutoFarm.lua
-print("📥 AutoFarm.lua script loaded!")
-
 return function(Window)
-    print("📦 AutoFarm function executed, adding tab...")
+    local AutoTab = Window:AddTab({ Name = "Autofarm", Icon = "zap", Description = "Egg Auto-Hatch Features" })
+    local ControlBox = AutoTab:AddLeftGroupbox("Egg Controls", "egg")
 
-    local Tab = Window:AddTab({ Title = "Autofarm" })
-    print("✅ Autofarm tab created!")
-
-    -- 🥚 Gather all egg names dynamically
+    -- Gather egg names dynamically
     local EggList = {}
-    for _, map in pairs(workspace.Game.Maps:GetChildren()) do
+    for _, map in ipairs(workspace.Game.Maps:GetChildren()) do
         local eggsFolder = map:FindFirstChild("Eggs")
         if eggsFolder then
-            for _, egg in pairs(eggsFolder:GetChildren()) do
+            for _, egg in ipairs(eggsFolder:GetChildren()) do
                 table.insert(EggList, egg.Name)
             end
         end
     end
 
-    print("📋 Eggs found:", #EggList, table.concat(EggList, ", "))
-
-    -- Default selection
     local SelectedEgg = EggList[1] or "None"
 
-    -- Dropdown: Egg selection
-    Tab:AddDropdown({
-        Title = "Select Egg",
-        Values = EggList,
-        Multi = false,
-        Default = SelectedEgg,
-        Callback = function(val)
-            SelectedEgg = val
-            print("🎯 Selected Egg:", val)
-        end
-    })
+    -- Dropdown: select egg
+    ControlBox:AddDropdown("Select Egg", EggList, function(val)
+        SelectedEgg = val
+        print("🎯 Selected Egg:", val)
+    end)
 
-    -- Toggle: Auto Hatch
+    -- Toggle: auto hatch
     local AutoHatch = false
-    Tab:AddToggle({
-        Title = "Auto Hatch Egg",
+    ControlBox:AddToggle("Auto Hatch Egg", {
+        Text = "Enable Auto Hatch",
         Default = false,
         Callback = function(val)
             AutoHatch = val
+            print(AutoHatch and "▶ Auto Hatch ON" or "⏹ Auto Hatch OFF")
             if AutoHatch then
-                print("▶️ Auto Hatch ON")
                 task.spawn(function()
                     while AutoHatch do
-                        local targetEgg = nil
-                        for _, map in pairs(workspace.Game.Maps:GetChildren()) do
+                        local targetEgg
+                        for _, map in ipairs(workspace.Game.Maps:GetChildren()) do
                             local eggsFolder = map:FindFirstChild("Eggs")
                             if eggsFolder and eggsFolder:FindFirstChild(SelectedEgg) then
                                 targetEgg = eggsFolder[SelectedEgg]
@@ -60,16 +47,16 @@ return function(Window)
                             local prompt = targetEgg:FindFirstChildWhichIsA("ProximityPrompt", true)
                             if prompt then
                                 fireproximityprompt(prompt)
+                            elseif targetEgg:FindFirstChild("ClickDetector") then
+                                fireclickdetector(targetEgg.ClickDetector)
                             end
                         else
-                            print("⚠️ Could not find egg:", SelectedEgg)
+                            print("⚠ Could not find egg:", SelectedEgg)
                         end
 
                         task.wait(1)
                     end
                 end)
-            else
-                print("⏹ Auto Hatch OFF")
             end
         end
     })
