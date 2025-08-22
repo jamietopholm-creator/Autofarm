@@ -1,15 +1,19 @@
--- AutoFarm.lua
+-- AutoFarm.lua (minimal, Obsidian-compatible)
+print("[AutoFarm] module downloaded")  -- shows when file is fetched
+
 return function(Window)
+    print("[AutoFarm] factory called with Window") -- shows when loader calls us
+
     local AutoTab = Window:AddTab({
         Name = "Autofarm",
-        Icon = "swords",
+        Icon = "zap",
         Description = "Enemy autofarm features"
     })
 
-    local FarmBox = AutoTab:AddLeftGroupbox("Enemy Autofarm", "farm")
-
-    FarmBox:AddLabel({ Text = "⚡ Autofarm loaded successfully" })
+    local Box = AutoTab:AddLeftGroupbox("Enemy Autofarm", "swords")
+    Box:AddLabel({ Text = "⚡ Autofarm tab loaded successfully" })
 end
+
 
 
 
@@ -163,6 +167,7 @@ end
         print(("🔄 Kriluni found: %d"):format(count))
     end)
 end
+
 
 
 
